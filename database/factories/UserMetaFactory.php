@@ -29,7 +29,7 @@ class UserMetaFactory extends Factory
             'user_id' => User::factory(),
             'business_id' => Business::factory(),
             'group_id' => Group::factory(),
-            'role_id' => Role::factory(),
+            'role_id' => Role::factory(), // Generate a valid role_id using the Role factory
             'approved' => $this->faker->boolean,
             'created_at' => now(),
             'updated_at' => now(),

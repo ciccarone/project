@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\ApprovedChamber;
 use App\Models\Chamber;
 use App\Models\Business;
+use App\Models\UserMeta;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -31,6 +32,9 @@ class DatabaseSeeder extends Seeder
 
         // Create businesses
         Business::factory()->count(10)->create();
+
+        // Create usermeta
+        UserMeta::factory()->count(10)->create();
 
         // Optionally, you can still call other seeders if needed
         $this->call([
