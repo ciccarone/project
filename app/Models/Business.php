@@ -29,4 +29,9 @@ class Business extends Model
     protected $casts = [
         'social_profiles' => 'array',
     ];
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'business_service');
+    }
 }
