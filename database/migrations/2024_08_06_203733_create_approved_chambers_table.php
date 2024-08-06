@@ -17,7 +17,7 @@ class CreateApprovedChambersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('random_code', 6);
-            $table->date('approved_date'); // Added approved_date column
+            $table->date('accepted_access')->nullable(); // Made accepted_access column optional
             $table->timestamps();
         });
     }
