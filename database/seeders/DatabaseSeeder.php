@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\ApprovedChamber;
+use App\Models\Chamber;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,13 +18,18 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Tony Ciccarone',
+            'email' => 'tony@3tonedigital.com',
         ]);
 
+        // Create approved chambers
+        ApprovedChamber::factory()->count(5)->create();
+
+        // Create chambers
+        Chamber::factory()->count(10)->create();
+
+        // Optionally, you can still call other seeders if needed
         $this->call([
-            ApprovedChambersTableSeeder::class,
-            ChambersTableSeeder::class,
             RolesTableSeeder::class,
             // Add other seeders here as needed
         ]);

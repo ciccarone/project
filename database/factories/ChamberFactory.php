@@ -26,6 +26,11 @@ class ChamberFactory extends Factory
         return [
             'approved_chamber_id' => ApprovedChamber::factory(),
             'name' => $this->faker->company . ' Chamber of Commerce',
+            'street' => $this->faker->streetAddress,
+            'city' => $this->faker->city,
+            'state' => $this->faker->stateAbbr,
+            'zip' => $this->faker->postcode,
+            'user_id' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ];
