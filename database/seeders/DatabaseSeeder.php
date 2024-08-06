@@ -3,14 +3,19 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\ApprovedChamber;
 use App\Models\Chamber;
 use App\Models\Business;
 use App\Models\UserMeta;
 use App\Models\Service;
+use App\Models\Group;
+use App\Models\Role;
 use App\Models\BusinessService;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+
+// use Illuminate\Database\Eloquent\Factories\Factory;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,6 +29,47 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Tony Ciccarone',
             'email' => 'tony@3tonedigital.com',
+            'password' => Hash::make('G0dmoney')
+        ]);
+
+        Business::factory()->create([
+            'name' => '3tone Digital',
+            'address' => '800 Route 146, Suite 320',
+            'website_url' => 'https://3tonedigital.com',
+            'social_profiles' => json_encode([
+                'twitter' => 'https://x.com/3tonedigital',
+                'linkedin' => 'https://linkedin.com/in/ciccarone',
+                'facebook' => 'https://facebook.com/yourprofile',
+                'instagram' => 'https://instagram.com/yourprofile',
+                'youtube' => 'https://youtube.com/yourchannel',
+                'tiktok' => 'https://tiktok.com/@yourprofile',
+                'github' => 'https://github.com/yourusername',
+            ]),
+        ]);
+
+        Chamber::factory()->create([
+            'name' => 'Southern Saratoga County Chamber of Commerce',
+            'street' => '58 Clifton Country Rd #102',
+            'city' => 'Clifton Park',
+            'state' => 'NY',
+            'zip' => '12065',
+            'user_id' => 1,
+        ]);
+
+        Group::factory()->create([
+            'name' => 'BRG4',
+            'chamber_id' => 1,
+            'group_manager_id' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        UserMeta::factory()->create([
+            'user_id' => 1,
+            'business_id' => 1,
+            'group_id' => Group::factory(),
+            'role_id' => Role::factory(), // Generate a valid role_id using the Role factory
+            'approved' => 1,
         ]);
 
         // Create approved chambers
@@ -48,7 +94,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesTableSeeder::class,
             GroupsTableSeeder::class,
-            // Add other seeders here as needed
         ]);
+
     }
 }
