@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         // Optionally, you can still call other seeders if needed
         $this->call([
             RolesTableSeeder::class,
-            // GroupsTableSeeder::class,
+            GroupsTableSeeder::class,
             // Add other seeders here as needed
         ]);
     }
