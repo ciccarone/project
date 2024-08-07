@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Models\Business;
+use App\Models\UserMeta;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -21,7 +23,7 @@ class ProfileController extends Controller
     {
 
         // $user = $request->user();
-        $user = Auth::user()->load('business'); // Load the business relationship
+        $user = Auth::user()->load('userMeta.business');
 
         $userMeta = $user->userMeta; // Assuming you have a relationship defined in the User model
         $chambers = Chamber::where('approved', true)->get(); // Fetch approved chambers
@@ -30,18 +32,31 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user', 'userMeta', 'chambers', 'groups'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
+
+        // Handle business name update
+        if ($request->has('business')) {
+            $businessName = $request->input('business');
+            $business = Business::where('name', $businessName)->first();
+
+            if ($business) {
+                $userMeta = $user->meta; // Assuming you have a relationship set up
+                $userMeta->business_id = $business->id;
+                $userMeta->save();
+            } else {
+                // Handle case where business is not found
+                return Redirect::route('profile.edit')->withErrors(['business' => 'Business not found']);
+            }
+        }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

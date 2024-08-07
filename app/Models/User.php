@@ -55,10 +55,4 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserMeta::class);
     }
-
-    // Define the relationship with Business
-    public function business()
-    {
-        return $this->belongsTo(Business::class);
-    }
 }

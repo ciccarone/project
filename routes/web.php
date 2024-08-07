@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Models\UserMeta;
+use App\Http\Controllers\BusinessController;
+
 
 
 Route::get('/', function () {
@@ -32,7 +34,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/update-chamber', [ProfileController::class, 'updateChamber'])->name('profile.updateChamber');
 
     Route::post('/profile/update-group', [ProfileController::class, 'updateGroup'])->name('profile.updateGroup');
+
+    Route::get('/business-names', [BusinessController::class, 'getBusinessNames'])->name('business.names');
 });
+
+
 
 
 require __DIR__.'/auth.php';

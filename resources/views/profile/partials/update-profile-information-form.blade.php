@@ -38,20 +38,46 @@
     </form>
     <x-input-error class="mt-2" :messages="$errors->get('group')" />
 
-<!-- Display the user's business information -->
-@if($user->business)
-    <div class="mt-4">
-        <x-input-label for="business" :value="__('Business')" />
-        <input id="business" type="text" class="mt-1 block w-full" value="{{ $user->business->name }}" disabled />
-    </div>
-@endif
-
-
-
-</div>
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
         @csrf
         @method('patch')
+
+        <!-- Display the user's business information -->
+        @if($userMeta->business_id)
+            <div class="mt-4">
+                <x-input-label for="business" :value="__('Business')" />
+                <input id="business" name="business" type="text" class="mt-1 block w-full" value="{{ $userMeta->business->name }}" />
+            </div>
+        @endif
+
+        <!-- Include jQuery for simplicity -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Include jQuery UI for autocomplete -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+        <script>
+        $(document).ready(function() {
+            $('#business').autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{ route('business.names') }}",
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX Error:", status, error); // Debugging statement
+                        }
+                    });
+                },
+                minLength: 2
+            });
+        });
+        </script>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -82,10 +108,6 @@
                 </div>
             @endif
         </div>
-
-        <div>
-        <!-- profile/partials/update-profile-information-form.blade.php -->
-
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
