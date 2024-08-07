@@ -50,6 +50,12 @@
             </div>
         @endif
 
+        <!-- Checkbox for approved status -->
+        <div class="mt-4">
+            <x-input-label for="approved" :value="__('Approved')" />
+            <input id="approved" name="approved" type="checkbox" class="mt-1" {{ $userMeta->approved ? 'checked' : '' }} />
+        </div>
+
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
