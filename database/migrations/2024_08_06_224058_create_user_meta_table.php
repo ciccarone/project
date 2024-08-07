@@ -18,7 +18,8 @@ class CreateUserMetaTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('business_id')->constrained('businesses')->onDelete('cascade');
             $table->foreignId('group_id')->constrained('groups')->onDelete('cascade');
-            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
+            $table->foreignId('chamber_id')->default(1)->constrained('chambers')->onDelete('cascade');
+            $table->integer('role_id')->default(2)->onDelete('cascade');
             $table->boolean('approved')->default(false);
             $table->timestamps();
         });

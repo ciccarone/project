@@ -46,6 +46,15 @@
                 </div>
             @endif
         </div>
+        @php
+
+
+        @endphp
+        <div>
+            <x-input-label for="chamber" :value="__('Chamber')" />
+            <x-text-input id="chamber" name="chamber" type="text" class="mt-1 block w-full" :value="{{ $userMeta->chamber_id }}" {{ $user->role_id != 1 ? 'readonly' : '' }} />
+            <x-input-error class="mt-2" :messages="$errors->get('chamber')" />
+        </div>
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>

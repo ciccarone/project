@@ -16,6 +16,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
@@ -63,6 +64,8 @@ class ProfileController extends Controller
         $user = $request->user();
         $userMeta = UserMeta::where('user_id', $user->id)->first();
 
-        return view('profile.show', compact('user', 'userMeta'));
+        $roles = config('app.roles'); // If added to config/app.php
+        var_dump($roles);
+        return view('profile.show', compact('user', 'userMeta', 'roles'));
     }
 }

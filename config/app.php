@@ -2,6 +2,7 @@
 
 return [
 
+    'roles' => json_decode(env('ROLES_JSON', '{"1": "admin", "2": "general"}'), true),
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -124,3 +125,4 @@ return [
     ],
 
 ];
+

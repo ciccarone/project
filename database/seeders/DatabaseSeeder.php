@@ -64,11 +64,13 @@ class DatabaseSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
+
         UserMeta::factory()->create([
             'user_id' => 1,
             'business_id' => 1,
+            'chamber_id' => 1,
             'group_id' => Group::factory(),
-            'role_id' => Role::factory(), // Generate a valid role_id using the Role factory
+            'role_id' => 1, // Generate a valid role_id using the Role factory
             'approved' => 1,
         ]);
 
@@ -92,8 +94,8 @@ class DatabaseSeeder extends Seeder
 
         // Optionally, you can still call other seeders if needed
         $this->call([
-            RolesTableSeeder::class,
             GroupsTableSeeder::class,
+            RolesTableSeeder::class,
         ]);
 
     }

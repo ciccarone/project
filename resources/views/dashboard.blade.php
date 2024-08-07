@@ -14,9 +14,12 @@
                     <li><strong>Name:</strong> {{ $user->name }}</li>
                     <li><strong>Email:</strong> {{ $user->email }}</li>
                     @if($userMeta)
-                        <li><strong>Role ID:</strong> {{ $userMeta->role_id }}</li>
-                        <!-- Add more UserMeta fields as needed -->
+                    @php
+                        $roles = config('app.roles');
+                    @endphp
+                    <li><strong>Role:</strong> {{ $roles[$userMeta->role_id] }}</li>
                     @endif
+
                 </ul>
                 </div>
                 <!-- Main Content -->
