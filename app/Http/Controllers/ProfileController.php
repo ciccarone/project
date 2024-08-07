@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+use Illuminate\Support\Facades\Log;
+
+
 class ProfileController extends Controller
 {
     /**
@@ -17,9 +20,12 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
 
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = $request->user();
+        $userMeta = $user->userMeta; // Assuming you have a relationship defined in the User model
+        $chambers = Chamber::where('approved', true)->get(); // Fetch approved chambers
+        $groups = Group::where('approved', true)->get(); // Fetch approved groups
+
+        return view('profile.edit', compact('user', 'userMeta', 'chambers', 'groups'));
     }
 
     /**
@@ -65,7 +71,56 @@ class ProfileController extends Controller
         $userMeta = UserMeta::where('user_id', $user->id)->first();
 
         $roles = config('app.roles'); // If added to config/app.php
-        var_dump($roles);
+
         return view('profile.show', compact('user', 'userMeta', 'roles'));
+    }
+    public function updateChamber(Request $request)
+    {
+    // Check if the authenticated user is user_id 1
+    if (Auth::id() !== 1) {
+        return redirect()->back()->withErrors(['error' => 'You are not authorized to perform this action.']);
+    }
+
+    $request->validate([
+        'chamber' => 'required|exists:chambers,id',
+    ]);
+
+    $user = Auth::user();
+    $userMeta = $user->meta;
+
+    if (!$userMeta) {
+        $userMeta = new UserMeta();
+        $userMeta->user_id = $user->id;
+    }
+
+    $userMeta->chamber_id = $request->input('chamber');
+    $userMeta->save();
+
+    return redirect()->back()->with('status', 'Chamber updated successfully!');
+    }
+
+    public function updateChamber(Request $request)
+    {
+    // Check if the authenticated user is user_id 1
+    if (Auth::id() !== 1) {
+        return redirect()->back()->withErrors(['error' => 'You are not authorized to perform this action.']);
+    }
+
+    $request->validate([
+        'group' => 'required|exists:groups,id',
+    ]);
+
+    $user = Auth::user();
+    $userMeta = $user->meta;
+
+    if (!$userMeta) {
+        $userMeta = new UserMeta();
+        $userMeta->user_id = $user->id;
+    }
+
+    $userMeta->group_id = $request->input('group');
+    $userMeta->save();
+
+    return redirect()->back()->with('status', 'Group updated successfully!');
     }
 }

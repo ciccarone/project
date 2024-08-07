@@ -12,7 +12,32 @@
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
+    <x-input-label for="chamber" :value="__('Chamber')" />
+    <form action="{{ route('profile.updateChamber') }}" method="POST">
+        @csrf
+        <select id="chamber" name="chamber" class="mt-1 block w-full" onchange="this.form.submit()" {{ Auth::id() !== 1 ? 'disabled' : '' }}>
+            @foreach($chambers as $chamber)
+                <option value="{{ $chamber->id }}" {{ $userMeta->chamber_id == $chamber->id ? 'selected' : '' }}>
+                    {{ $chamber->name }}
+                </option>
+            @endforeach
+        </select>
+    </form>
+    <x-input-error class="mt-2" :messages="$errors->get('chamber')" />
 
+    <x-input-label for="group" :value="__('Group')" />
+    <form action="{{ route('profile.updateGroup') }}" method="POST">
+        @csrf
+        <select id="group" name="group" class="mt-1 block w-full" onchange="this.form.submit()" {{ Auth::id() !== 1 ? 'disabled' : '' }}>
+            @foreach($groups as $group)
+                <option value="{{ $group->id }}" {{ $userMeta->group_id == $group->id ? 'selected' : '' }}>
+                    {{ $group->name }}
+                </option>
+            @endforeach
+        </select>
+    </form>
+    <x-input-error class="mt-2" :messages="$errors->get('chamber')" />
+</div>
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
         @csrf
         @method('patch')
@@ -46,15 +71,10 @@
                 </div>
             @endif
         </div>
-        @php
 
-
-        @endphp
         <div>
-            <x-input-label for="chamber" :value="__('Chamber')" />
-            <x-text-input id="chamber" name="chamber" type="text" class="mt-1 block w-full" :value="{{ $userMeta->chamber_id }}" {{ $user->role_id != 1 ? 'readonly' : '' }} />
-            <x-input-error class="mt-2" :messages="$errors->get('chamber')" />
-        </div>
+        <!-- profile/partials/update-profile-information-form.blade.php -->
+
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>

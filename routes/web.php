@@ -28,6 +28,11 @@ Route::middleware('auth')->group(function () {
 
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('/profile/update-chamber', [ProfileController::class, 'updateChamber'])->name('profile.updateChamber');
+
+    Route::post('/profile/update-group', [ProfileController::class, 'updateGroup'])->name('profile.updateGroup');
 });
+
 
 require __DIR__.'/auth.php';

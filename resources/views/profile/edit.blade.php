@@ -12,9 +12,11 @@
                 @php
                     $user = Auth::user();
                     $userMeta = $user->userMeta;
+                    $chambers = App\Models\Chamber::all();
+                    $groups = App\Models\Group::all();
 
                 @endphp
-                @include('profile.partials.update-profile-information-form', ['user' => $user, 'userMeta' => $userMeta])
+                @include('profile.partials.update-profile-information-form', ['user' => $user, 'userMeta' => $userMeta, 'chambers' => $chambers])
 
 
                 </div>

@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserMeta::class);
     }
+
+    public function meta()
+    {
+        return $this->hasOne(UserMeta::class);
+    }
 }
