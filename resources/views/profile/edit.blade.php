@@ -13,7 +13,8 @@
                     $user = Auth::user();
                     $userMeta = $user->userMeta;
                     $chambers = App\Models\Chamber::all();
-                    $groups = App\Models\Group::all();
+                    $chamberId = $userMeta->chamber_id; // Assuming $userMeta is available and contains the selected chamber ID
+                    $groups = App\Models\Group::where('chamber_id', $chamberId)->get();
 
                 @endphp
                 @include('profile.partials.update-profile-information-form', ['user' => $user, 'userMeta' => $userMeta, 'chambers' => $chambers])

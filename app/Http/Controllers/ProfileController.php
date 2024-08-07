@@ -20,7 +20,9 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
 
-        $user = $request->user();
+        // $user = $request->user();
+        $user = Auth::user()->load('business'); // Load the business relationship
+
         $userMeta = $user->userMeta; // Assuming you have a relationship defined in the User model
         $chambers = Chamber::where('approved', true)->get(); // Fetch approved chambers
         $groups = Group::where('approved', true)->get(); // Fetch approved groups
@@ -99,7 +101,7 @@ class ProfileController extends Controller
     return redirect()->back()->with('status', 'Chamber updated successfully!');
     }
 
-    public function updateChamber(Request $request)
+    public function updateGroup(Request $request)
     {
     // Check if the authenticated user is user_id 1
     if (Auth::id() !== 1) {

@@ -36,7 +36,18 @@
             @endforeach
         </select>
     </form>
-    <x-input-error class="mt-2" :messages="$errors->get('chamber')" />
+    <x-input-error class="mt-2" :messages="$errors->get('group')" />
+
+<!-- Display the user's business information -->
+@if($user->business)
+    <div class="mt-4">
+        <x-input-label for="business" :value="__('Business')" />
+        <input id="business" type="text" class="mt-1 block w-full" value="{{ $user->business->name }}" disabled />
+    </div>
+@endif
+
+
+
 </div>
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
         @csrf
