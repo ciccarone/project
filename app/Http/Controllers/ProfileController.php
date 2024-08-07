@@ -57,4 +57,12 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function showProfile(Request $request): View
+    {
+        $user = $request->user();
+        $userMeta = UserMeta::where('user_id', $user->id)->first();
+
+        return view('profile.show', compact('user', 'userMeta'));
+    }
 }
