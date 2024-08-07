@@ -34,6 +34,10 @@ class ProfileController extends Controller
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+
+        if (Auth::id() !== 1) {
+            return redirect()->back()->withErrors(['error' => 'You are not authorized to perform this action.']);
+        }
         $user = $request->user();
         $user->fill($request->validated());
 

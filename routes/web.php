@@ -35,7 +35,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/profile/update-group', [ProfileController::class, 'updateGroup'])->name('profile.updateGroup');
 
-    Route::get('/business-names', [BusinessController::class, 'getBusinessNames'])->name('business.names');
+    Route::get('/business/names', [BusinessController::class, 'getBusinessNames']);
 });
 
 
