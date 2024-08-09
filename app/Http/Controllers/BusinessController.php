@@ -35,9 +35,12 @@ class BusinessController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
+            'address' => 'array',
+            'website_url' => 'array',
             'services' => 'array',
             'services.*' => 'array',
             'services.*.*' => 'exists:services,id',
+            'social_profiles' => 'array',
         ]);
 
         // var_dump($data);
@@ -57,6 +60,28 @@ class BusinessController extends Controller
     } else {
         // var_dump($data);
         // exit();
+    }
+
+    foreach ($data['address'] as $businessId => $address) {
+        $business = Business::find($businessId);
+        if ($business) {
+            $business->address = $address;
+            $business->website_url = $data['website_url'][$businessId] ?? null;
+            $business->services()->sync($data['services'][$businessId] ?? []);
+
+            // Handle social profiles
+            $socialProfiles = [];
+            if (isset($data['social_profiles'][$businessId])) {
+                foreach ($data['social_profiles'][$businessId]['network'] as $index => $network) {
+                    $url = $data['social_profiles'][$businessId]['url'][$index] ?? '';
+                    if ($network && $url) {
+                        $socialProfiles[$network] = $url;
+                    }
+                }
+            }
+            $business->social_profiles = json_encode($socialProfiles);
+            $business->save();
+        }
     }
 
         return redirect()->back()->with('success', 'Services updated successfully.');

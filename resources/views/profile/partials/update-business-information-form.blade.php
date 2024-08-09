@@ -38,10 +38,53 @@
                     </option>
                 @endforeach
             </select>
+
+            <!-- Social Profiles -->
+            <label for="social_profiles-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Social Profiles</label>
+            <div id="social_profiles_container-{{ $business->id }}">
+            @foreach(json_decode($business->social_profiles, true) as $network => $url)
+                    <div class="flex items-center space-x-2 mt-2">
+                        <select name="social_profiles[{{ $business->id }}][network][]" class="block w-1/3 rounded-md border-gray-300 shadow-sm">
+                            <option value="facebook" {{ $network == 'facebook' ? 'selected' : '' }}>Facebook</option>
+                            <option value="twitter" {{ $network == 'twitter' ? 'selected' : '' }}>Twitter</option>
+                            <option value="linkedin" {{ $network == 'linkedin' ? 'selected' : '' }}>LinkedIn</option>
+                            <option value="instagram" {{ $network == 'instagram' ? 'selected' : '' }}>Instagram</option>
+                            <option value="youtube" {{ $network == 'youtube' ? 'selected' : '' }}>YouTube</option>
+                            <option value="tiktok" {{ $network == 'tiktok' ? 'selected' : '' }}>TikTok</option>
+                            <option value="github" {{ $network == 'github' ? 'selected' : '' }}>GitHub</option>
+                            <!-- Add more social networks as needed -->
+                        </select>
+                        <input type="url" name="social_profiles[{{ $business->id }}][url][]" value="{{ $url }}" class="block w-2/3 rounded-md border-gray-300 shadow-sm">
+                    </div>
+                @endforeach
+            </div>
+            <script>
+                function addSocialProfile(businessId) {
+                    const container = document.getElementById(`social_profiles_container-${businessId}`);
+                    const div = document.createElement('div');
+                    div.classList.add('flex', 'items-center', 'space-x-2', 'mt-2');
+                    div.innerHTML = `
+                        <select name="social_profiles[${businessId}][network][]" class="block w-1/3 rounded-md border-gray-300 shadow-sm">
+                            <option value="facebook">Facebook</option>
+                            <option value="twitter">Twitter</option>
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="youtube">YouTube</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="github">GitHub</option>
+                            <!-- Add more social networks as needed -->
+                        </select>
+                        <input type="url" name="social_profiles[${businessId}][url][]" class="block w-2/3 rounded-md border-gray-300 shadow-sm">
+                    `;
+                    container.appendChild(div);
+                }
+            </script>
+            </div>
+            <button type="button" onclick="addSocialProfile({{ $business->id }})" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">Add Social Profile</button>
         </div>
     @endforeach
 
-    <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Save Services</button></form>
+    <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Save</button></form>
         </div>
 
     @endif
