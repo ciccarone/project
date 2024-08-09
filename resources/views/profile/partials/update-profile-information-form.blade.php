@@ -42,35 +42,26 @@
         @csrf
         @method('patch')
 
-    <!-- File input for profile image -->
-    <div class="mt-4">
-        <x-input-label for="profile_image" :value="__('Profile Image')" />
-        <input id="profile_image" name="profile_image" type="file" class="mt-1 block w-full" />
-        <x-input-error class="mt-2" :messages="$errors->get('profile_image')" />
-    </div>
 
-    <!-- Display the current profile image -->
-    @if($userMeta->profile_image)
-        <div class="mt-4">
-            <img src="{{ asset('storage/' . $userMeta->profile_image) }}" alt="Profile Image" class="w-32 h-32 rounded-full">
-        </div>
-        <div class="bg-blue-500 text-white p-4">
-    Tailwind CSS is working!
-</div>
-    @endif
-
-        <!-- Display the user's business information -->
-        @if($userMeta->business_id)
+        <!-- Display the current profile image -->
+        @if($userMeta->profile_image)
             <div class="mt-4">
-                <x-input-label for="business" :value="__('Business')" />
-                <input id="business" name="business" type="text" class="mt-1 block w-full" value="{{ $userMeta->business->name }}" />
+                <img src="{{ asset('storage/' . $userMeta->profile_image) }}" alt="Profile Image" class="w-32 h-32 rounded-full">
             </div>
         @endif
+        <div class="mt-4">
+            <x-input-label for="profile_image" :value="__('Profile Image')" />
+            <input id="profile_image" name="profile_image" type="file" class="mt-1 block w-full" />
+            <x-input-error class="mt-2" :messages="$errors->get('profile_image')" />
+        </div>
+
+
+
 
         <!-- Checkbox for approved status -->
         <div class="mt-4">
             <x-input-label for="approved" :value="__('Approved')" />
-            <input id="approved" name="approved" type="checkbox" class="mt-1" {{ $userMeta->approved ? 'checked' : '' }} />
+            <input id="approved" name="approved" type="checkbox" class="mt-1" {{ $userMeta->approved ? 'checked' : '' }} {{ Auth::id() !== 1 ? 'disabled' : '' }}/>
         </div>
 
         <div>

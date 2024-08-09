@@ -7,6 +7,21 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+        <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <div class="max-w-xl">
+                @php
+                    $user = Auth::user();
+                    $userMeta = $user->userMeta;
+                    $chambers = App\Models\Chamber::all();
+                    $chamberId = $userMeta->chamber_id; // Assuming $userMeta is available and contains the selected chamber ID
+                    $groups = App\Models\Group::where('chamber_id', $chamberId)->get();
+
+                    $allServices = App\Models\Service::all();
+                @endphp
+                @include('profile.partials.update-business-information-form', ['user' => $user, 'userMeta' => $userMeta, 'chambers' => $chambers, 'allServices' => $allServices])
+                </div>
+            </div>
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">
                 @php
@@ -18,10 +33,10 @@
 
                 @endphp
                 @include('profile.partials.update-profile-information-form', ['user' => $user, 'userMeta' => $userMeta, 'chambers' => $chambers])
-
-
                 </div>
             </div>
+
+
 
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">

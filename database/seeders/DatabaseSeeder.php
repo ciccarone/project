@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
         Business::factory()->create([
             'name' => '3tone Digital',
             'address' => '800 Route 146, Suite 320',
+            'user_id' => 1,
             'website_url' => 'https://3tonedigital.com',
             'social_profiles' => json_encode([
                 'twitter' => 'https://x.com/3tonedigital',

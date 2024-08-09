@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Business;
 use App\Models\UserMeta;
+use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -24,7 +25,7 @@ class ProfileController extends Controller
 
         // $user = $request->user();
         $user = Auth::user()->load('userMeta.business');
-
+        $user = Auth::user()->load('businesses');
         $userMeta = $user->userMeta; // Assuming you have a relationship defined in the User model
         $chambers = Chamber::where('approved', true)->get(); // Fetch approved chambers
         $groups = Group::where('approved', true)->get(); // Fetch approved groups

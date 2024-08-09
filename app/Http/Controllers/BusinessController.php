@@ -23,4 +23,28 @@ class BusinessController extends Controller
 
         return response()->json($formattedBusinesses);
     }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        $allServices = Service::all();
+
+        return view('update-business-information-form', compact('user', 'allServices'));
+    }
+
+    public function store(Request $request)
+    {
+        // Validate and store the business
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'user_id' => 'required|exists:users,id',
+            'website_url' => 'nullable|url',
+            'social_profiles' => 'nullable|json',
+        ]);
+
+        Business::create($validatedData);
+
+        return redirect()->route('business.index')->with('success', 'Business created successfully.');
+    }
 }

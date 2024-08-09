@@ -34,4 +34,9 @@ class Business extends Model
     {
         return $this->belongsToMany(Service::class, 'business_service');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
