@@ -35,18 +35,21 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
 
+
         if (Auth::id() !== 1) {
             return redirect()->back()->withErrors(['error' => 'You are not authorized to perform this action.']);
         }
+
         $user = $request->user();
         $user->fill($request->validated());
-
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
         $user->save();
+        // var_dump($request->has('approved'));
+        // exit();
 
         // Handle business name update
         if ($request->has('business')) {
@@ -62,6 +65,11 @@ class ProfileController extends Controller
                 return Redirect::route('profile.edit')->withErrors(['business' => 'Business not found']);
             }
         }
+
+        // Handle approved status update on user meta
+        $userMeta = $user->meta; // Assuming you have a relationship set up
+        $userMeta->approved = $request->has('approved') ? true : false;
+        $userMeta->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

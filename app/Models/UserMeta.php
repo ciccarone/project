@@ -22,6 +22,10 @@ class UserMeta extends Model
         'approved',
     ];
 
+    protected $casts = [
+        'approved' => 'boolean',
+    ];
+
     /**
      * Get the user associated with the user meta.
      */
