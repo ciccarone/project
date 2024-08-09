@@ -32,6 +32,37 @@ class BusinessController extends Controller
         return view('update-business-information-form', compact('user', 'allServices'));
     }
 
+    public function update(Request $request)
+    {
+        $data = $request->validate([
+            'services' => 'array',
+            'services.*' => 'array',
+            'services.*.*' => 'exists:services,id',
+        ]);
+
+        // var_dump($data);
+        // exit();
+    // Check if 'services' key exists in the validated data
+    if (isset($data['services'])) {
+        foreach ($data['services'] as $businessId => $serviceIds) {
+            $business = Business::findOrFail($businessId);
+            var_dump($data['services']);
+            exit();
+            // Check if $serviceIds is empty
+            if (empty($serviceIds)) {
+                $business->services()->sync([]);
+            } else {
+                $business->services()->sync($serviceIds);
+            }
+        }
+    } else {
+        // var_dump($data);
+        // exit();
+    }
+
+        return redirect()->back()->with('success', 'Services updated successfully.');
+    }
+
     public function store(Request $request)
     {
         // Validate and store the business

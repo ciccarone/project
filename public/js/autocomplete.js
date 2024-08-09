@@ -19,4 +19,11 @@ $(document).ready(function() {
         },
         minLength: 2
     });
+    $('.services-select').select2({
+        tags: true,
+        maximumSelectionLength: 3,
+        tokenSeparators: [',', ' '],
+        placeholder: "Select or add services",
+        allowClear: true
+    });
 });

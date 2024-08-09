@@ -66,7 +66,7 @@
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
@@ -110,10 +110,4 @@
     </form>
 </section>
 
-<!-- Include jQuery for simplicity -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Include jQuery UI for autocomplete -->
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<!-- Include custom JavaScript file -->
-<script src="{{ asset('js/autocomplete.js') }}"></script>
+

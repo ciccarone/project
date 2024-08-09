@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
 
     Route::patch('/business', [BusinessController::class, 'update'])->name('business.update');
     Route::post('/businesses', [BusinessController::class, 'store'])->name('business.store');
+    Route::put('/businesses/update', [BusinessController::class, 'update'])->name('businesses.update');
 });
 
 
