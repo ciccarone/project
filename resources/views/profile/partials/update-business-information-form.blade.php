@@ -22,6 +22,14 @@
             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ $business->name }}</h3>
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ $business->description }}</p>
 
+                        <!-- Address Input -->
+                        <label for="address-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
+            <input type="text" id="address-{{ $business->id }}" name="address[{{ $business->id }}]" value="{{ $business->address }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+
+            <!-- Website URL Input -->
+            <label for="website_url-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Website URL</label>
+            <input type="url" id="website_url-{{ $business->id }}" name="website_url[{{ $business->id }}]" value="{{ $business->website_url }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+
             <label for="services-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Services</label>
             <select id="services-{{ $business->id }}" name="services[{{ $business->id }}][]" class="services-select" multiple="multiple" style="width: 100%">
                 @foreach($allServices as $service)
