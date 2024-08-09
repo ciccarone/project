@@ -46,8 +46,7 @@ class BusinessController extends Controller
     if (isset($data['services'])) {
         foreach ($data['services'] as $businessId => $serviceIds) {
             $business = Business::findOrFail($businessId);
-            var_dump($data['services']);
-            exit();
+
             // Check if $serviceIds is empty
             if (empty($serviceIds)) {
                 $business->services()->sync([]);
