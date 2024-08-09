@@ -20,6 +20,7 @@ class UserMeta extends Model
         'group_id',
         'role_id',
         'approved',
+        'profile_image',
     ];
 
     protected $casts = [

@@ -35,20 +35,31 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
 
-
+        $request->validate([
+            // Other validation rules
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
         if (Auth::id() !== 1) {
             return redirect()->back()->withErrors(['error' => 'You are not authorized to perform this action.']);
         }
 
         $user = $request->user();
         $user->fill($request->validated());
+        $userMeta = $user->meta; // Assuming you have a relationship set up
+
+
+        // Handle the profile image upload
+        if ($request->hasFile('profile_image')) {
+            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+            $userMeta->profile_image = $imagePath;
+        }
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
         $user->save();
-        // var_dump($request->has('approved'));
+        // $request->file('profile_image');
         // exit();
 
         // Handle business name update

@@ -21,6 +21,7 @@ class CreateUserMetaTable extends Migration
             $table->foreignId('chamber_id')->default(1)->constrained('chambers')->onDelete('cascade');
             $table->integer('role_id')->default(2)->onDelete('cascade');
             $table->boolean('approved')->default(false);
+            $table->string('profile_image')->nullable();
             $table->timestamps();
         });
     }
