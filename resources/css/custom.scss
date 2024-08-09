@@ -1,0 +1,13 @@
+// resources/css/custom.scss
+
+// Import Tailwind CSS
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+// Your custom styles
+.custom-class {
+    width: 8rem;  // Equivalent to w-32
+    height: 8rem; // Equivalent to h-32
+    border-radius: 9999px; // Equivalent to rounded-full
+}
