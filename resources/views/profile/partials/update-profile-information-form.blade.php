@@ -46,7 +46,7 @@
         <!-- Display the current profile image -->
         @if($userMeta->profile_image)
             <div class="mt-4">
-                <img src="{{ asset('storage/' . $userMeta->profile_image) }}" alt="Profile Image" class="w-32 h-32 rounded-full">
+                <img src="{{ asset('storage/' . $userMeta->profile_image) }}" alt="Profile Image" class="w-64 object-cover">
             </div>
         @endif
         <div class="mt-4">

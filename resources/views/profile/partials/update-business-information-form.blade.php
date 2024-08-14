@@ -13,7 +13,7 @@
     @if($user && $user->businesses && $user->businesses->isNotEmpty())
 
         <div class="mt-6 space-y-6">
-        <form action="{{ route('businesses.update') }}" method="POST">
+        <form action="{{ route('businesses.update') }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -22,8 +22,20 @@
             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ $business->name }}</h3>
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ $business->description }}</p>
 
-                        <!-- Address Input -->
-                        <label for="address-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
+            <!-- Display the current logo image -->
+            @if($business->logo_image)
+                <div class="mt-4">
+                    <img src="{{ asset('storage/' . $business->logo_image) }}" alt="Logo Image" class="w-64 object-cover">
+                </div>
+            @endif
+            <div class="mt-4">
+                <x-input-label for="logo_image" :value="__('Logo Image')" />
+                <input id="logo_image" name="logo_image" type="file" class="mt-1 block w-full" />
+                <x-input-error class="mt-2" :messages="$errors->get('logo_image')" />
+            </div>
+
+            <!-- Address Input -->
+            <label for="address-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
             <input type="text" id="address-{{ $business->id }}" name="address[{{ $business->id }}]" value="{{ $business->address }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
 
             <!-- Website URL Input -->

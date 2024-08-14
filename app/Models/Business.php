@@ -19,6 +19,7 @@ class Business extends Model
         'address',
         'website_url',
         'social_profiles',
+        'logo_image',
     ];
 
     /**

@@ -20,7 +20,7 @@ class CreateBusinessesTable extends Migration
             $table->string('website_url');
             $table->json('social_profiles');
             $table->foreignId('user_id')->nullable()->constrained('users'); // Optional associated user
-            $table->string('profile_image')->nullable();
+            $table->string('logo_image')->nullable();
             $table->timestamps();
         });
     }
