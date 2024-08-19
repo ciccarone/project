@@ -1,11 +1,11 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Business Information') }}
+            {{ __('Business Profile') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __("Update your business information.") }}
+            {{ __("Remember to keep your business information up-to-date!") }}
         </p>
     </header>
 
@@ -28,20 +28,20 @@
                             </div>
                         @endif
                         <div class="mt-4">
-                            <x-input-label for="logo_image-{{ $business->id }}" :value="__('Logo Image')" />
+                            <x-input-label for="logo_image-{{ $business->id }}" :value="__('Update Logo Image')" />
                             <input id="logo_image-{{ $business->id }}" name="logo_image[{{ $business->id }}]" type="file" class="mt-1 block w-full" />
                             <x-input-error class="mt-2" :messages="$errors->get('logo_image')" />
                         </div>
 
                         <!-- Address Input -->
-                        <label for="address-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
+                        <label for="address-{{ $business->id }}" class="block text-sm font-medium text-gray-700 mt-3 dark:text-gray-300">Address</label>
                         <input type="text" id="address-{{ $business->id }}" name="address[{{ $business->id }}]" value="{{ $business->address }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
 
                         <!-- Website URL Input -->
-                        <label for="website_url-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Website URL</label>
+                        <label for="website_url-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mt-3 ">Website URL</label>
                         <input type="url" id="website_url-{{ $business->id }}" name="website_url[{{ $business->id }}]" value="{{ $business->website_url }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
 
-                        <label for="services-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Services</label>
+                        <label for="services-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mt-3 ">Services</label>
                         <select id="services-{{ $business->id }}" name="services[{{ $business->id }}][]" class="services-select" multiple="multiple" style="width: 100%">
                             @foreach($allServices as $service)
                                 <option value="{{ $service->id }}" {{ in_array($service->id, $business->services->pluck('id')->toArray()) ? 'selected' : '' }}>
@@ -51,7 +51,7 @@
                         </select>
 
                         <!-- Social Profiles -->
-                        <label for="social_profiles-{{ $business->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Social Profiles</label>
+                        <label for="social_profiles-{{ $business->id }}" class="mt-3 block text-sm font-medium text-gray-700 dark:text-gray-300">Social Profiles</label>
                         <div id="social_profiles_container-{{ $business->id }}">
                             @foreach(json_decode($business->social_profiles, true) as $network => $url)
                                 <div class="flex items-center space-x-2 mt-2">
@@ -69,11 +69,15 @@
                                 </div>
                             @endforeach
                         </div>
-                        <button type="button" onclick="addSocialProfile({{ $business->id }})" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">Add Social Profile</button>
+
+                        <div class="flex justify-between mt-4">
+                        <button type="button" onclick="addSocialProfile({{ $business->id }})" class="px-4 py-2 bg-green-500 text-white rounded">Add Another Social Profile</button>
+
+                            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+                        </div>
                     </div>
                 @endforeach
 
-                <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Save</button>
             </form>
         </div>
     @else
@@ -81,20 +85,20 @@
         <div class="mt-6 space-y-6">
             <form action="{{ route('business.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="p-4 border rounded-lg">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('New Business') }}</h3>
 
                     <div class="mt-4">
-                        <x-input-label for="new_logo_image" :value="__('Logo Image')" />
+                        <x-input-label for="new_logo_image" :value="__('Add Logo Image')" />
                         <input id="new_logo_image" name="logo_image" type="file" class="mt-1 block w-full" />
                         <x-input-error class="mt-2" :messages="$errors->get('logo_image')" />
                     </div>

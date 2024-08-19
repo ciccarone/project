@@ -1,42 +1,19 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Profile Information') }}
+            {{ __('User Profile') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Keep your profile information ") }}
         </p>
     </header>
-
+    <div class="mt-6 space-y-6">
+    <div class="p-4 border rounded-lg">
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
-    <x-input-label for="chamber" :value="__('Chamber')" />
-    <form action="{{ route('profile.updateChamber') }}" method="POST">
-        @csrf
-        <select id="chamber" name="chamber" class="mt-1 block w-full" onchange="this.form.submit()" {{ Auth::id() !== 1 ? 'disabled' : '' }}>
-            @foreach($chambers as $chamber)
-                <option value="{{ $chamber->id }}" {{ $userMeta->chamber_id == $chamber->id ? 'selected' : '' }}>
-                    {{ $chamber->name }}
-                </option>
-            @endforeach
-        </select>
-    </form>
-    <x-input-error class="mt-2" :messages="$errors->get('chamber')" />
 
-    <x-input-label for="group" :value="__('Group')" />
-    <form action="{{ route('profile.updateGroup') }}" method="POST">
-        @csrf
-        <select id="group" name="group" class="mt-1 block w-full" onchange="this.form.submit()" {{ Auth::id() !== 1 ? 'disabled' : '' }}>
-            @foreach($groups as $group)
-                <option value="{{ $group->id }}" {{ $userMeta->group_id == $group->id ? 'selected' : '' }}>
-                    {{ $group->name }}
-                </option>
-            @endforeach
-        </select>
-    </form>
-    <x-input-error class="mt-2" :messages="$errors->get('group')" />
 
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
@@ -59,10 +36,12 @@
 
 
         <!-- Checkbox for approved status -->
-        <div class="mt-4">
-            <x-input-label for="approved" :value="__('Approved')" />
-            <input id="approved" name="approved" type="checkbox" class="mt-1" {{ $userMeta->approved ? 'checked' : '' }} {{ Auth::id() !== 1 ? 'disabled' : '' }}/>
-        </div>
+        @if (Auth::id() === 0)
+            <div class="mt-4">
+                <x-input-label for="approved" :value="__('Approved')" />
+                <input id="approved" name="approved" type="checkbox" class="mt-1" {{ $userMeta->approved ? 'checked' : '' }} />
+            </div>
+        @endif
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -108,5 +87,36 @@
             @endif
         </div>
     </form>
+
+
+    </div>
+    </div>
 </section>
 
+<div class="mt-4">
+<x-input-label for="chamber" :value="__('Chamber of Commerce')" />
+    <form action="{{ route('profile.updateChamber') }}" method="POST">
+        @csrf
+        <select id="chamber" name="chamber" class="mt-1 block w-full" onchange="this.form.submit()" {{ Auth::id() !== 0 ? 'disabled' : '' }}>
+            @foreach($chambers as $chamber)
+                <option value="{{ $chamber->id }}" {{ $userMeta->chamber_id == $chamber->id ? 'selected' : '' }}>
+                    {{ $chamber->name }}
+                </option>
+            @endforeach
+        </select>
+    </form>
+    <x-input-error class="mt-2" :messages="$errors->get('chamber')" />
+
+    <x-input-label for="group" :value="__('Chamber of Commerce Group')" class="mt-2" />
+    <form action="{{ route('profile.updateGroup') }}" method="POST">
+        @csrf
+        <select id="group" name="group" class="mt-1 block w-full" onchange="this.form.submit()" {{ Auth::id() !== 0 ? 'disabled' : '' }}>
+            @foreach($groups as $group)
+                <option value="{{ $group->id }}" {{ $userMeta->group_id == $group->id ? 'selected' : '' }}>
+                    {{ $group->name }}
+                </option>
+            @endforeach
+        </select>
+    </form>
+    <x-input-error class="mt-2" :messages="$errors->get('group')" />
+</div>

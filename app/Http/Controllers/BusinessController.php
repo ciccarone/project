@@ -39,7 +39,11 @@ class BusinessController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'address' => 'array',
+  => $serviceIds) {
+                $business = Business::findOrFail($businessId);
+
+                // Check if $serviceIds is empty
+                if (empty($serviceIds)) {           'address' => 'array',
             'website_url' => 'array',
             'services' => 'array',
             'services.*' => 'array',
@@ -51,11 +55,7 @@ class BusinessController extends Controller
 
         // Check if 'services' key exists in the validated data
         if (isset($data['services'])) {
-            foreach ($data['services'] as $businessId => $serviceIds) {
-                $business = Business::findOrFail($businessId);
-
-                // Check if $serviceIds is empty
-                if (empty($serviceIds)) {
+            foreach ($data['services'] as $businessId
                     $business->services()->sync([]);
                 } else {
                     $business->services()->sync($serviceIds);
