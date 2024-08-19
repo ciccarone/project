@@ -35,6 +35,7 @@ class BusinessController extends Controller
     }
 
 
+
     public function update(Request $request)
     {
         $data = $request->validate([
@@ -44,7 +45,8 @@ class BusinessController extends Controller
             'services.*' => 'array',
             'services.*.*' => 'exists:services,id',
             'social_profiles' => 'array',
-            'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo_image' => 'array',
+            'logo_image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         // Check if 'services' key exists in the validated data
@@ -81,14 +83,14 @@ class BusinessController extends Controller
                 $business->social_profiles = json_encode($socialProfiles);
 
                 // Handle logo image upload
-                if ($request->hasFile('logo_image')) {
+                if ($request->hasFile("logo_image.$businessId")) {
                     // Ensure the directory exists
                     if (!Storage::disk('public')->exists('logo_images')) {
                         Storage::disk('public')->makeDirectory('logo_images');
                     }
 
                     // Store the uploaded file
-                    $imagePath = $request->file('logo_image')->store('logo_images', 'public');
+                    $imagePath = $request->file("logo_image.$businessId")->store('logo_images', 'public');
                     $business->logo_image = $imagePath;
                 }
 
@@ -99,55 +101,54 @@ class BusinessController extends Controller
         return redirect()->back()->with('success', 'Services updated successfully.');
     }
 
-<?php
-public function store(Request $request)
-{
-    // Validate the request data
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'address' => 'required|string|max:255',
-        'user_id' => 'required|exists:users,id',
-        'website_url' => 'nullable|url|max:255',
-        'services' => 'array',
-        'services.*' => 'exists:services,id',
-        'social_profiles' => 'array',
-        'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-    ]);
 
-    // Create a new business instance
-    $business = new Business();
-    $business->name = $validatedData['name'];
-    $business->address = $validatedData['address'];
-    $business->user_id = $validatedData['user_id'];
-    $business->website_url = $validatedData['website_url'] ?? null;
+    public function store(Request $request)
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'business_name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'website_url' => 'nullable|url|max:255',
+            'services' => 'array',
+            'services.*' => 'exists:services,id',
+            'social_profiles' => 'array',
+            'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
 
-    // Handle logo image upload
-    if ($request->hasFile('logo_image')) {
-        $imagePath = $request->file('logo_image')->store('logo_images', 'public');
-        $business->logo_image = $imagePath;
-    }
+        // Create a new business instance
+        $business = new Business();
+        $business->name = $validatedData['business_name'];
+        $business->address = $validatedData['address'];
+        $business->user_id = auth()->id(); // Assign the authenticated user's ID
+        $business->website_url = $validatedData['website_url'] ?? null;
 
-    // Handle social profiles
-    $socialProfiles = [];
-    if (isset($validatedData['social_profiles'])) {
-        foreach ($validatedData['social_profiles']['network'] as $index => $network) {
-            $url = $validatedData['social_profiles']['url'][$index] ?? '';
-            if ($network && $url) {
-                $socialProfiles[$network] = $url;
+        // Handle logo image upload
+        if ($request->hasFile('logo_image')) {
+            $imagePath = $request->file('logo_image')->store('logo_images', 'public');
+            $business->logo_image = $imagePath;
+        }
+
+        // Handle social profiles
+        $socialProfiles = [];
+        if (isset($validatedData['social_profiles'])) {
+            foreach ($validatedData['social_profiles']['network'] as $index => $network) {
+                $url = $validatedData['social_profiles']['url'][$index] ?? '';
+                if ($network && $url) {
+                    $socialProfiles[$network] = $url;
+                }
             }
         }
+        $business->social_profiles = json_encode($socialProfiles);
+
+        // Save the business
+        $business->save();
+
+        // Sync services
+        if (isset($validatedData['services'])) {
+            $business->services()->sync($validatedData['services']);
+        }
+
+        // Redirect with success message
+        return redirect()->back()->with('success', 'Services updated successfully.');
     }
-    $business->social_profiles = json_encode($socialProfiles);
-
-    // Save the business
-    $business->save();
-
-    // Sync services
-    if (isset($validatedData['services'])) {
-        $business->services()->sync($validatedData['services']);
-    }
-
-    // Redirect with success message
-    return redirect()->route('business.index')->with('success', 'Business created successfully.');
-}
 }

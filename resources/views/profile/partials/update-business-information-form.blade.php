@@ -79,9 +79,17 @@
     @else
         <!-- Form for adding a new business -->
         <div class="mt-6 space-y-6">
-            <form action="{{ route('businesses.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('business.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
                 <div class="p-4 border rounded-lg">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('New Business') }}</h3>
 
