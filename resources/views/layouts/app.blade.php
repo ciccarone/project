@@ -31,7 +31,11 @@
 
             <!-- Page Content -->
             <main>
+            @isset($slot)
                 {{ $slot }}
+            @else
+                @yield('content')
+            @endisset
             </main>
         </div>
         <!-- Include jQuery for simplicity -->

@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Business;
+use App\Models\User;
+use App\Models\Service;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 
 class BusinessController extends Controller
@@ -39,11 +42,7 @@ class BusinessController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-  => $serviceIds) {
-                $business = Business::findOrFail($businessId);
-
-                // Check if $serviceIds is empty
-                if (empty($serviceIds)) {           'address' => 'array',
+            'address' => 'array',
             'website_url' => 'array',
             'services' => 'array',
             'services.*' => 'array',
@@ -53,15 +52,19 @@ class BusinessController extends Controller
             'logo_image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        // Check if 'services' key exists in the validated data
-        if (isset($data['services'])) {
-            foreach ($data['services'] as $businessId
-                    $business->services()->sync([]);
-                } else {
-                    $business->services()->sync($serviceIds);
-                }
+    // Check if 'services' key exists in the validated data
+    if (isset($data['services'])) {
+        foreach ($data['services'] as $businessId => $serviceIds) {
+            $business = Business::findOrFail($businessId);
+
+            // Check if $serviceIds is empty
+            if (empty($serviceIds)) {
+                $business->services()->sync([]);
+            } else {
+                $business->services()->sync($serviceIds);
             }
         }
+    }
 
         foreach ($data['address'] as $businessId => $address) {
             $business = Business::find($businessId);
@@ -150,5 +153,58 @@ class BusinessController extends Controller
 
         // Redirect with success message
         return redirect()->back()->with('success', 'Services updated successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        // Fetch all services
+        $allServices = Service::all();
+
+        // Get the search query, selected services, and sorting option
+        $query = $request->input('query');
+        $selectedServices = $request->input('services', []);
+        $sortOption = $request->input('sort', 'alphabetically');
+
+        // Get the authenticated user's chamber ID from user_metas
+        $chamberId = Auth::user()->userMeta->chamber_id;
+
+        // Perform the search logic
+        $businesses = Business::query();
+
+        if ($query) {
+            $businesses->where(function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%')
+                  ->orWhereHas('user', function ($q) use ($query) {
+                      $q->where('name', 'like', '%' . $query . '%');
+                  });
+            });
+        }
+
+        if (!empty($selectedServices)) {
+            $businesses->whereHas('services', function ($q) use ($selectedServices) {
+                $q->whereIn('name', $selectedServices);
+            });
+        }
+
+        // Apply sorting
+        if ($sortOption === 'recently_updated') {
+            $businesses->orderBy('updated_at', 'desc');
+        } else {
+            $businesses->orderBy('name', 'asc');
+        }
+
+        // Count all matching businesses without chamber restriction
+        $allMatchingBusinessesCount = $businesses->count();
+
+        // Restrict to businesses from users in the same chamber
+        $businesses->whereHas('user.userMeta', function ($q) use ($chamberId) {
+            $q->where('chamber_id', $chamberId);
+        });
+
+        $businesses = $businesses->get();
+        $users = User::where('name', 'like', '%' . $query . '%')->get();
+        $servicesResult = Service::whereIn('name', $selectedServices)->get();
+
+        return view('search.results', compact('allServices', 'businesses', 'users', 'servicesResult', 'sortOption', 'allMatchingBusinessesCount'));
     }
 }
