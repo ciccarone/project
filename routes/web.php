@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+
 use Illuminate\Support\Facades\Route;
 use App\Models\UserMeta;
 use App\Http\Controllers\BusinessController;
@@ -20,6 +21,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/search', [BusinessController::class, 'search'])->name('search');
+
+Route::get('/business/{id}', [BusinessController::class, 'show'])->name('business.show');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', function () {
@@ -42,7 +46,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/businesses', [BusinessController::class, 'store'])->name('business.store');
     Route::put('/businesses/update', [BusinessController::class, 'update'])->name('businesses.update');
     Route::post('/business', [BusinessController::class, 'store'])->name('business.store');
+
+
 });
+
 
 
 

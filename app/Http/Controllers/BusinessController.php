@@ -166,7 +166,8 @@ class BusinessController extends Controller
         $sortOption = $request->input('sort', 'alphabetically');
 
         // Get the authenticated user's chamber ID from user_metas
-        $chamberId = Auth::user()->userMeta->chamber_id;
+        $chamberId = Auth::check() ? Auth::user()->userMeta->chamber_id : 0;
+
 
         // Perform the search logic
         $businesses = Business::query();
@@ -206,5 +207,11 @@ class BusinessController extends Controller
         $servicesResult = Service::whereIn('name', $selectedServices)->get();
 
         return view('search.results', compact('allServices', 'businesses', 'users', 'servicesResult', 'sortOption', 'allMatchingBusinessesCount'));
+    }
+
+    public function show($id)
+    {
+        $business = Business::with('user', 'services')->findOrFail($id);
+        return view('business.show', compact('business'));
     }
 }

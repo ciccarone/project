@@ -15,7 +15,7 @@
                     <form action="{{ route('search') }}" method="GET" class="mb-4">
                         <div class="form-group mb-4">
                             <label for="query" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Search</label>
-                            <input type="text" id="query" name="query" class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Search by business name, service, or user name">
+                            <input type="text" id="query" name="query" class="text-black form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Search by business name, service, or user name">
                         </div>
                         <div class="form-group mb-4">
                             <label for="services" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Services</label>
@@ -38,7 +38,30 @@
                     <!-- Displaying the search results -->
                     @if(isset($businesses))
                         <h2 class="text-xl font-semibold mb-4">Business Results</h2>
-                        <p class="mb-4">Showing {{ $businesses->count() }} of {{ $allMatchingBusinessesCount }} businesses that match your search criteria.</p>
+                        <p class="mb-4">
+                            @php
+                                $searchPerformed = request()->has('query') && request()->input('query') !== '';
+                            @endphp
+
+                            @if($searchPerformed)
+                                @if($businesses->count() === 1)
+                                    Showing 1 business that matches your search criteria.
+                                @else
+                                    Showing {{ $businesses->count() }} businesses that match your search criteria.
+                                @endif
+                            @else
+                                @if($businesses->count() === 1)
+                                    Showing 1 business.
+                                @else
+                                    Showing {{ $businesses->count() }} businesses.
+                                @endif
+                            @endif
+                            <span class="ml-2">
+                                <svg class="w-5 h-5 inline-block text-gray-500 cursor-pointer" data-tippy-content="There are {{ $allMatchingBusinessesCount - $businesses->count() }} businesses part of other chambers that you cannot access." xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 18.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                                </svg>
+                            </span>
+                        </p>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             @foreach($businesses as $business)
                                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
@@ -49,19 +72,23 @@
                                         <div>
                                             <h3 class="text-lg font-bold">{{ $business->name }}</h3>
                                             <p><strong>Owner:</strong> {{ $business->user->name }}</p>
-                                            <p><strong>Website:</strong> <a href="{{ $business->website_url }}" class="text-blue-500">{{ $business->website_url }}</a></p>
+                                            @if($business->website_url)
+                                                <p><a href="{{ $business->website_url }}" target="_BLANK" class="text-blue-500">Visit Website</a></p>
+                                            @endif
                                             <p><strong>Address:</strong> {{ $business->address }}</p>
                                         </div>
                                     </div>
                                     <div>
+                                        @if($business->services->isNotEmpty())
                                         <h4 class="font-semibold">Services:</h4>
-                                        <ul class="flex flex-wrap gap-2">
-                                            @foreach($business->services as $service)
-                                                <li class="bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
-                                                    {{ $service->name }}
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                            <ul class="flex flex-wrap gap-2">
+                                                @foreach($business->services as $service)
+                                                    <li class="bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
+                                                        {{ $service->name }}
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach
