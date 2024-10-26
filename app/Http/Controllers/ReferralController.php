@@ -13,6 +13,7 @@ class ReferralController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'message' => 'required|string',
+            'g-recaptcha-response' => 'required|captcha',
         ]);
 
         Referral::create([

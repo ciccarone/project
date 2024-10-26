@@ -48,18 +48,34 @@
                                     <input type="hidden" name="ref" value="{{ request('ref') }}">
                                     <div class="mb-4">
                                         <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
-                                        <input type="text" name="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-black" required>
+                                        <input type="text" name="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-black" value="{{ old('name', Auth::check() ? Auth::user()->name : '') }}" required>
+                                        @error('name')
+                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                                        <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-black" required>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                                    <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-black" value="{{ old('email', Auth::check() ? Auth::user()->email : '') }}" required>
+                                    @error('email')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
                                     </div>
                                     <div class="mb-4">
                                         <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
-                                        <textarea name="message" id="message" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-black" rows="4" required></textarea>
+                                        <textarea name="message" id="message" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-black" rows="4" required>{{ old('message', Auth::check() ? "{$business->user->name}, this is a referral from " . Auth::user()->name . ":" : '') }}</textarea>
+                                        @error('message')
+                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-4">
+                                        {!! NoCaptcha::display() !!}
+                                        @error('g-recaptcha-response')
+                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                     <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Submit</button>
                                 </form>
+                                {!! NoCaptcha::renderJs() !!}
                             @else
                                 <h4 class="font-semibold">Referral QR Code:</h4>
                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
