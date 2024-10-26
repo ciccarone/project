@@ -68,7 +68,7 @@
                         </p>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             @foreach($businesses as $business)
-                                <a class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6" href="/business/{{ $business->slug }}">
+                                <a class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 transition duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700" href="/business/{{ $business->slug }}">
                                     <div class="flex items-center mb-4">
                                         @if($business->logo_image)
                                             <img src="{{ asset('storage/' . $business->logo_image) }}" alt="Logo" class="w-16 h-16 mr-4 rounded-full">
