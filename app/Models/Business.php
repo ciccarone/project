@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Business extends Model
 {
     use HasFactory;
+
+    use Sluggable;
 
     /**
      * The attributes that are mass assignable.
@@ -20,8 +23,18 @@ class Business extends Model
         'website_url',
         'social_profiles',
         'logo_image',
-        'description'
+        'description',
+        'slug'
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
 
     /**
      * The attributes that should be cast to native types.

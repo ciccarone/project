@@ -235,7 +235,7 @@ class BusinessController extends Controller
         return view('search.results', compact('allServices', 'businesses', 'users', 'servicesResult', 'sortOption', 'allMatchingBusinessesCount'));
     }
 
-    public function show($id)
+    public function show($slug)
     {
         $business = Business::where('slug', $slug)->with('user', 'services')->firstOrFail();
         return view('business.show', compact('business'));
