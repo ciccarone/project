@@ -39,13 +39,13 @@
             </main>
         </div>
         <!-- Include jQuery for simplicity -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Include jQuery UI for autocomplete -->
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Include jQuery UI for autocomplete -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<!-- Include custom JavaScript file -->
-<script src="{{ asset('js/autocomplete.js') }}"></script>
+        <!-- Include custom JavaScript file -->
+        <script src="{{ asset('js/autocomplete.js') }}"></script>
     </body>
 </html>

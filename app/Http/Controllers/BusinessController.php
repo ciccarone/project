@@ -61,7 +61,7 @@ class BusinessController extends Controller
         $business = Business::findOrFail($businessId);
 
         // Sanitize the description if it exists
-        $description = isset($description) ? Purifier::clean($description) : null;
+        $description = isset($description) ? $description : null;
 
         $business->update([
             'description' => $description,

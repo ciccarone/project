@@ -15,7 +15,7 @@
                     <form action="{{ route('search') }}" method="GET" class="mb-4">
                         <div class="form-group mb-4">
                             <label for="query" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Search</label>
-                            <input type="text" id="query" name="query" class="text-black form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Search by business name, service, or user name">
+                            <input type="text" id="query" name="query" class="text-black form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Search by business name, keyword, or user">
                         </div>
                         <div class="form-group mb-4">
                             <label for="services" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Services</label>
