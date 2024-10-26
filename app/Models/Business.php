@@ -20,6 +20,7 @@ class Business extends Model
         'website_url',
         'social_profiles',
         'logo_image',
+        'description'
     ];
 
     /**

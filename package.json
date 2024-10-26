@@ -19,6 +19,7 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "tinymce": "^7.4.1",
         "tippy.js": "^6.3.7"
     }
 }

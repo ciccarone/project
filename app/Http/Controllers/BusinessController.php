@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Service;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Purifier;
 
 
 class BusinessController extends Controller
@@ -41,16 +42,31 @@ class BusinessController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'address' => 'array',
-            'website_url' => 'array',
-            'services' => 'array',
-            'services.*' => 'array',
-            'services.*.*' => 'exists:services,id',
-            'social_profiles' => 'array',
-            'logo_image' => 'array',
-            'logo_image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+    $data = $request->validate([
+        'address' => 'array',
+        'website_url' => 'array',
+        'services' => 'array',
+        'services.*' => 'array',
+        'services.*.*' => 'exists:services,id',
+        'social_profiles' => 'array',
+        'logo_image' => 'array',
+        'logo_image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'description' => 'array',
+        'description.*' => 'nullable|string',
+    ]);
+
+    // Process each business
+    foreach ($data['description'] as $businessId => $description) {
+        $business = Business::findOrFail($businessId);
+
+        // Sanitize the description if it exists
+        $description = isset($description) ? Purifier::clean($description) : null;
+
+        $business->update([
+            'description' => $description,
         ]);
+    }
 
     // Check if 'services' key exists in the validated data
     if (isset($data['services'])) {
@@ -107,6 +123,7 @@ class BusinessController extends Controller
 
     public function store(Request $request)
     {
+
         // Validate the request data
         $validatedData = $request->validate([
             'business_name' => 'required|string|max:255',
@@ -116,7 +133,14 @@ class BusinessController extends Controller
             'services.*' => 'exists:services,id',
             'social_profiles' => 'array',
             'logo_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'description' => 'array',
+            'description.*' => 'nullable|string',
         ]);
+
+        $data['description'] = isset($data['description']) ? Purifier::clean($data['description']) : null;
+
+
+
 
         // Create a new business instance
         $business = new Business();

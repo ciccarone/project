@@ -8,7 +8,15 @@
             {{ __("Remember to keep your business information up-to-date!") }}
         </p>
     </header>
-
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <!-- Display existing businesses -->
     @if($user && $user->businesses && $user->businesses->isNotEmpty())
         <div class="mt-6 space-y-6">
@@ -51,6 +59,12 @@
                                         </option>
                                     @endforeach
                                 </select>
+
+                                <!-- Description Input -->
+                                <label for="description-{{ $business->id }}" class="block text-sm font-medium text-gray-700 mt-3 dark:text-gray-300">Description</label>
+
+                                <label for="description-{{ $business->id }}" class="block text-sm font-medium text-gray-700 mt-3 dark:text-gray-300">Description</label>
+                                <textarea id="description-{{ $business->id }}" name="description[{{ $business->id }}]" class="wysiwyg-editor mt-1 block w-full rounded-md border-gray-300 shadow-sm">{{ $business->description ?? '' }}</textarea>
 
                                 <!-- Social Profiles -->
                                 <label for="social_profiles-{{ $business->id }}" class="mt-3 block text-sm font-medium text-gray-700 dark:text-gray-300">Social Profiles</label>
@@ -134,6 +148,10 @@
                         @endforeach
                     </select>
 
+                    <!-- Description Input -->
+                    <label for="new_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+                    <textarea id="new_description" name="description" class="wysiwyg-editor mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
+
                     <!-- Social Profiles -->
                     <label for="new_social_profiles" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Social Profiles</label>
                     <div id="new_social_profiles_container">
@@ -160,7 +178,18 @@
     @endif
 </section>
 
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+
 <script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        tinymce.init({
+            selector: 'textarea.wysiwyg-editor',
+            plugins: 'link image code',
+            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+        });
+    });
     function addSocialProfile(businessId) {
         const container = document.getElementById(`social_profiles_container-${businessId}`);
         const div = document.createElement('div');
