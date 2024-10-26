@@ -14,14 +14,16 @@
                     <h1 class="text-2xl font-bold mb-4">Search</h1>
                     <form action="{{ route('search') }}" method="GET" class="mb-4">
                         <div class="form-group mb-4">
-                            <label for="query" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Search</label>
-                            <input type="text" id="query" name="query" class="text-black form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Search by business name, keyword, or user">
+                            <label for="query" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Keyword</label>
+                            <input type="text" id="query" name="query" class="text-black form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Search by business name, keyword, or user" value="{{ request('query') }}">
                         </div>
                         <div class="form-group mb-4">
-                            <label for="services" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Services</label>
+                            <label for="services" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Services</label>
                             <select id="services" name="services[]" class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm text-black" multiple>
                                 @foreach($allServices as $service)
-                                    <option value="{{ $service->name }}">{{ $service->name }}</option>
+                                    <option value="{{ $service->name }}" {{ in_array($service->name, request('services', [])) ? 'selected' : '' }}>
+                                        {{ $service->name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -56,11 +58,13 @@
                                     Showing {{ $businesses->count() }} businesses.
                                 @endif
                             @endif
-                            <span class="ml-2">
-                                <svg class="w-5 h-5 inline-block text-gray-500 cursor-pointer" data-tippy-content="There are {{ $allMatchingBusinessesCount - $businesses->count() }} businesses part of other chambers that you cannot access." xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 18.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                                </svg>
-                            </span>
+                            @if(($allMatchingBusinessesCount - $businesses->count()) > 0)
+                                <span class="ml-2">
+                                    <svg class="w-5 h-5 inline-block text-gray-500 cursor-pointer" data-tippy-content="There are {{ $allMatchingBusinessesCount - $businesses->count() }} businesses part of other chambers that you cannot access." xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 18.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                                    </svg>
+                                </span>
+                            @endif
                         </p>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             @foreach($businesses as $business)
@@ -79,7 +83,7 @@
                                     </div>
                                     <div>
                                         @if($business->services->isNotEmpty())
-                                        <h4 class="font-semibold">Services:</h4>
+                                            <h4 class="font-semibold">Services:</h4>
                                             <ul class="flex flex-wrap gap-2">
                                                 @foreach($business->services as $service)
                                                     <li class="bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">

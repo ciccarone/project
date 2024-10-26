@@ -192,13 +192,13 @@ class BusinessController extends Controller
         // Get the authenticated user's chamber ID from user_metas
         $chamberId = Auth::check() ? Auth::user()->userMeta->chamber_id : 0;
 
-
         // Perform the search logic
         $businesses = Business::query();
 
         if ($query) {
             $businesses->where(function ($q) use ($query) {
                 $q->where('name', 'like', '%' . $query . '%')
+                  ->orWhere('description', 'like', '%' . $query . '%') // Add description to search criteria
                   ->orWhereHas('user', function ($q) use ($query) {
                       $q->where('name', 'like', '%' . $query . '%');
                   });
@@ -206,9 +206,11 @@ class BusinessController extends Controller
         }
 
         if (!empty($selectedServices)) {
-            $businesses->whereHas('services', function ($q) use ($selectedServices) {
-                $q->whereIn('name', $selectedServices);
-            });
+            foreach ($selectedServices as $service) {
+                $businesses->whereHas('services', function ($q) use ($service) {
+                    $q->where('name', $service);
+                });
+            }
         }
 
         // Apply sorting
@@ -235,7 +237,7 @@ class BusinessController extends Controller
 
     public function show($id)
     {
-        $business = Business::with('user', 'services')->findOrFail($id);
+        $business = Business::where('slug', $slug)->with('user', 'services')->firstOrFail();
         return view('business.show', compact('business'));
     }
 }

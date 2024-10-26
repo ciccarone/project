@@ -22,7 +22,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/search', [BusinessController::class, 'search'])->name('search');
 
-Route::get('/business/{id}', [BusinessController::class, 'show'])->name('business.show');
+Route::get('/business/{slug}', [BusinessController::class, 'show'])->name('business.show');
 
 
 Route::middleware('auth')->group(function () {
