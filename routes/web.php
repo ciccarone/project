@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Models\UserMeta;
 use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\ReferralController;
 
 
 
@@ -24,6 +25,7 @@ Route::get('/search', [BusinessController::class, 'search'])->name('search');
 
 Route::get('/business/{slug}', [BusinessController::class, 'show'])->name('business.show');
 
+Route::post('/referrals', [ReferralController::class, 'store'])->name('referrals.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', function () {

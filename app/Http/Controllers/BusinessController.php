@@ -10,6 +10,8 @@ use App\Models\Service;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Purifier;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 
 
 class BusinessController extends Controller
@@ -238,6 +240,14 @@ class BusinessController extends Controller
     public function show($slug)
     {
         $business = Business::where('slug', $slug)->with('user', 'services')->firstOrFail();
-        return view('business.show', compact('business'));
+        $userId = Auth::id();
+        $url = route('business.show', ['slug' => $slug, 'ref' => $userId]);
+
+        $data = $url;
+
+        // quick and simple:
+        $qrCodeDataUri = '<div class="referral-qr max-w-1 w-32 h-32"><img class="rounded-lg shadow-lg m-4" src="'.(new QRCode)->render($data).'" alt="QR Code" /></div>';
+
+        return view('business.show', compact('business', 'qrCodeDataUri', 'url'));
     }
 }
