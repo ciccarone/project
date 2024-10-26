@@ -68,14 +68,13 @@
                                     <div class="flex items-center mb-4">
                                         @if($business->logo_image)
                                             <img src="{{ asset('storage/' . $business->logo_image) }}" alt="Logo" class="w-16 h-16 mr-4 rounded-full">
+                                        @else
+                                            <div class="w-16 h-16 mr-4 rounded-full bg-gray-300 flex items-center justify-center text-white text-2xl font-bold">
+                                                {{ strtoupper(substr($business->name, 0, 1)) }}
+                                            </div>
                                         @endif
                                         <div>
                                             <h3 class="text-lg font-bold">{{ $business->name }}</h3>
-                                            <p><strong>Owner:</strong> {{ $business->user->name }}</p>
-                                            @if($business->website_url)
-                                                <p><a href="{{ $business->website_url }}" target="_BLANK" class="text-blue-500">Visit Website</a></p>
-                                            @endif
-                                            <p><strong>Address:</strong> {{ $business->address }}</p>
                                         </div>
                                     </div>
                                     <div>

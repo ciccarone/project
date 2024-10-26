@@ -21,7 +21,7 @@
                                 <p><strong>Owner:</strong> {{ $business->user->name }}</p>
                             @endif
                             @if($business->website_url)
-                                <p><a href="{{ $business->website_url }}" target="_BLANK" class="text-blue-500">Visit Website</a></p>
+                                <p><a href="{{ $business->website_url }}"   target="_BLANK" class="text-blue-500">Visit Website</a></p>
                             @endif
                             <p><strong>Address:</strong> {{ $business->address }}</p>
                         </div>
