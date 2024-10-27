@@ -22,21 +22,22 @@
                                     <p><strong>Owner:</strong> {{ $business->user->name }}</p>
                                 @endif
                                 @if($business->website_url)
-                                    <p><a href="{{ $business->website_url }}" target="_BLANK" class="text-blue-500">Visit Website</a></p>
+                                    <p><a href="{{ $business->website_url }}" target="_BLANK" class="text-blue-500">{{ $business->website_url }}</a></p>
                                 @endif
-                                <p><strong>Address:</strong> {{ $business->address }}</p>
+                                <p><strong>Address:</strong> <a href="https://www.google.com/maps/place/{{ $business->address }}">{{ $business->address }}</a></p>
                                 <div>
-                        @if($business->services->isNotEmpty())
-                            <h4 class="font-semibold">Services:</h4>
-                            <ul class="flex flex-wrap gap-2">
-                                @foreach($business->services as $service)
-                                    <li class="bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
-                                        {{ $service->name }}
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </div>
+                                    @if($business->services->isNotEmpty())
+                                        <h4 class="font-semibold">Services:</h4>
+                                        <ul class="flex flex-wrap gap-2">
+                                            @foreach($business->services as $service)
+                                                <li class="bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
+                                                    {{ $service->name }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+
+                                </div>
                             </div>
 
                         </div>
