@@ -24,7 +24,8 @@ class Business extends Model
         'social_profiles',
         'logo_image',
         'description',
-        'slug'
+        'slug',
+        'user_id',
     ];
 
     public function sluggable(): array
@@ -53,5 +54,10 @@ class Business extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(Referral::class);
     }
 }

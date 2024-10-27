@@ -23,11 +23,22 @@
                 </ul>
                 </div>
                 <!-- Main Content -->
-                <div class="w-3/4 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        {{ __("You're logged in!") }}
-                    </div>
+                <div class="w-3/4 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-4">
+    <div class="p-6 text-gray-900 dark:text-gray-100">
+        <h2 class="text-xl font-semibold mb-4">Referrals</h2>
+        @foreach(Auth::user()->businesses as $business)
+            <h3 class="text-lg font-semibold">{{ $business->name }}</h3>
+            @foreach($business->referrals as $referral)
+                <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
+                    <p><strong>Name:</strong> {{ $referral->name }}</p>
+                    <p><strong>Email:</strong> {{ $referral->email }}</p>
+                    <p><strong>Message:</strong> {{ $referral->message }}</p>
+                    <p><strong>Qualified:</strong> {{ $referral->qualified ? 'Yes' : 'No' }}</p>
                 </div>
+            @endforeach
+        @endforeach
+    </div>
+</div>
             </div>
         </div>
     </div>

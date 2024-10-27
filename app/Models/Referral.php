@@ -10,6 +10,6 @@ class Referral extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ref', 'name', 'email', 'message', 'qualified',
+        'ref', 'business_id', 'name', 'email', 'message', 'qualified',
     ];
 }

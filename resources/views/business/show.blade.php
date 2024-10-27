@@ -46,6 +46,8 @@
                                 <h4 class="font-semibold">Contact {{ $business->name }}</h4>
                                 <form action="{{ route('referrals.store') }}" method="POST" class="mt-4">
                                     @csrf
+                                    <input type="hidden" name="business_id" value="{{ $business->id }}">
+
                                     <input type="hidden" name="ref" value="{{ request('ref') }}">
                                     <div class="mb-4">
                                         <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
